@@ -22,7 +22,25 @@ class FetchItems(private val repo: IEventsRepository) {
             Resource.Error(
                 message = TextHelper.Exception(NullOrEmptyOutputData)
             )
-        else
-            result
+        else {
+            val categories = getPopulatedCategories(result.data)
+
+            return if (categories.isEmpty())
+                Resource.Error(
+                    message = TextHelper.Exception(NullOrEmptyOutputData)
+                )
+            else
+                Resource.Success(data = categories)
+        }
     }
+
+    private fun getPopulatedCategories(items: List<Item>) =
+        items.filter {
+            it.id != null
+                    && !it.title.isNullOrEmpty()
+                    && !it.imageUrl.isNullOrEmpty()
+                    && it.minBudget != null
+                    && it.maxBudget != null
+                    && it.avgBudget != null
+        }
 }

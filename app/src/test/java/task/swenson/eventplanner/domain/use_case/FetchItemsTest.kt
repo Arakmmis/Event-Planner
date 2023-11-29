@@ -37,7 +37,18 @@ class FetchItemsTest {
 
     @Test
     fun `If items retrieval successful, return item list`() = runTest {
-        val stubbedResponse: Resource<List<Item>?> = Resource.Success(listOf(Item()))
+        val stubbedResponse: Resource<List<Item>?> = Resource.Success(
+            listOf(
+                Item(
+                    id = 1,
+                    title = "Item",
+                    imageUrl = "www.google.com",
+                    minBudget = 10,
+                    maxBudget = 100,
+                    avgBudget = 50
+                )
+            )
+        )
         val categoryId = 1
 
         Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
@@ -63,6 +74,18 @@ class FetchItemsTest {
     @Test
     fun `If items are empty, return error`() = runTest {
         val stubbedResponse: Resource<List<Item>?> = Resource.Success(data = emptyList())
+        val categoryId = 1
+
+        Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
+
+        val result = fetchItems(categoryId)
+
+        assertThat(result.message).isNotNull()
+    }
+
+    @Test
+    fun `If items data in list are null or empty, return error`() = runTest {
+        val stubbedResponse: Resource<List<Item>?> = Resource.Success(listOf(Item()))
         val categoryId = 1
 
         Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)

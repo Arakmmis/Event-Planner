@@ -9,7 +9,7 @@ data class Item(
     @SerializedName("id")
     val id: Int? = null,
     @SerializedName("image")
-    val image: String? = null,
+    val imageUrl: String? = null,
     @SerializedName("maxBudget")
     val maxBudget: Int? = null,
     @SerializedName("minBudget")
