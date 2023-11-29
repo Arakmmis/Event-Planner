@@ -15,5 +15,7 @@ data class Item(
     @SerializedName("minBudget")
     val minBudget: Int? = null,
     @SerializedName("title")
-    val title: String? = null
+    val title: String? = null,
+
+    val isSelected: Boolean = false
 )
