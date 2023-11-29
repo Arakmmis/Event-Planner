@@ -3,22 +3,37 @@ package task.swenson.eventplanner.domain.use_case
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import task.swenson.eventplanner.data.pojos.Category
+import task.swenson.eventplanner.domain.repository.IEventsRepository
 import task.swenson.eventplanner.domain.util.Resource
-import task.swenson.eventplanner.domain.util.TextHelper
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FetchCategoriesTest {
 
-    private val fetchCategories: FetchCategories = mock()
+    private lateinit var fetchCategories: FetchCategories
+    private val repo: IEventsRepository = mock()
+
+    @Before
+    fun setUp() {
+        fetchCategories = FetchCategories(repo)
+    }
 
     @Test
-    fun `If categories successful, return category list`() = runTest {
-        val stubbedResponse: Resource<List<Category>?> = Resource.Success(listOf(Category()))
-        `when`(fetchCategories()).thenReturn(stubbedResponse)
+    fun `If categories retrieval successful, return category list`() = runTest {
+        val stubbedResponse: Resource<List<Category>?> = Resource.Success(
+            listOf(
+                Category(
+                    id = 1,
+                    title = "Category 1",
+                    imageUrl = "www.google.com"
+                )
+            )
+        )
+        `when`(repo.fetchCategories()).thenReturn(stubbedResponse)
 
         val result = fetchCategories()
 
@@ -27,18 +42,34 @@ class FetchCategoriesTest {
     }
 
     @Test
-    fun `If categories are empty or null, return empty error`() = runTest {
-        val errorMsg = "Category list is empty"
-        val stubbedResponse: Resource<List<Category>?> = Resource.Error(
-            message = TextHelper.Exception(
-                IllegalStateException(errorMsg)
-            ),
-            data = null
-        )
-        `when`(fetchCategories()).thenReturn(stubbedResponse)
+    fun `If categories are null, return error`() = runTest {
+        val stubbedResponse: Resource<List<Category>?> = Resource.Success(data = null)
+
+        `when`(repo.fetchCategories()).thenReturn(stubbedResponse)
 
         val result = fetchCategories()
 
-        assertThat(result.message?.asString()).isEqualTo(errorMsg)
+        assertThat(result.message).isNotNull()
+    }
+
+    @Test
+    fun `If categories are empty, return error`() = runTest {
+        val stubbedResponse: Resource<List<Category>?> = Resource.Success(data = emptyList())
+
+        `when`(repo.fetchCategories()).thenReturn(stubbedResponse)
+
+        val result = fetchCategories()
+
+        assertThat(result.message).isNotNull()
+    }
+
+    @Test
+    fun `If category data in list are null or empty, return error`() = runTest {
+        val stubbedResponse: Resource<List<Category>?> = Resource.Success(listOf(Category()))
+        `when`(repo.fetchCategories()).thenReturn(stubbedResponse)
+
+        val result = fetchCategories()
+
+        assertThat(result.message).isNotNull()
     }
 }
