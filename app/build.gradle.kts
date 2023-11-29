@@ -48,6 +48,7 @@ val espresso by extra { "3.5.1" }
 val junit by extra { "4.13.2" }
 val ktx by extra { "1.12.0" }
 val material by extra { "1.10.0" }
+val mockito by extra { "5.7.0" }
 val okHttp by extra { "5.0.0-alpha.6" }
 val retrofit by extra { "2.9.0" }
 val timber by extra { "5.0.1" }
@@ -64,6 +65,7 @@ dependencies {
     // Testing
     testImplementation("junit:junit:$junit")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTest")
+    testImplementation("org.mockito:mockito-core:$mockito")
     androidTestImplementation("androidx.test.ext:junit:$androidJunit")
     androidTestImplementation("androidx.test.espresso:espresso-core:$espresso")
 
