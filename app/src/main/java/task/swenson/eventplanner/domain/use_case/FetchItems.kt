@@ -6,8 +6,9 @@ import task.swenson.eventplanner.domain.util.InvalidCategoryId
 import task.swenson.eventplanner.domain.util.NoInputProvided
 import task.swenson.eventplanner.domain.util.Resource
 import task.swenson.eventplanner.domain.util.TextHelper
+import javax.inject.Inject
 
-class FetchItems(
+class FetchItems @Inject constructor(
     private val repo: IEventsRepository,
     private val validator: ValidateItems = ValidateItems()
 ) {

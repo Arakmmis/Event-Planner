@@ -5,8 +5,9 @@ import task.swenson.eventplanner.domain.repository.IEventsRepository
 import task.swenson.eventplanner.domain.util.Resource
 import task.swenson.eventplanner.domain.util.TextHelper
 import task.swenson.eventplanner.domain.util.UpsertFailure
+import javax.inject.Inject
 
-class UpsertItem(
+class UpsertItem @Inject constructor(
     private val repo: IEventsRepository,
     private val validator: ValidateItems = ValidateItems()
 ) {

@@ -5,8 +5,9 @@ import task.swenson.eventplanner.domain.repository.IEventsRepository
 import task.swenson.eventplanner.domain.util.NullOrEmptyOutputData
 import task.swenson.eventplanner.domain.util.Resource
 import task.swenson.eventplanner.domain.util.TextHelper
+import javax.inject.Inject
 
-class FetchCategories(
+class FetchCategories @Inject constructor(
     private val repo: IEventsRepository
 ) {
 

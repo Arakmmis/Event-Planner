@@ -8,8 +8,9 @@ import task.swenson.eventplanner.domain.util.NullOrEmptyOutputData
 import task.swenson.eventplanner.domain.util.Resource
 import task.swenson.eventplanner.domain.util.TextHelper
 import task.swenson.eventplanner.domain.util.UpsertFailure
+import javax.inject.Inject
 
-class EventsRepository(
+class EventsRepository @Inject constructor(
     private val remoteDataSource: IRemoteDataSource,
     private val localDataSource: ILocalDataSource
 ) : IEventsRepository {

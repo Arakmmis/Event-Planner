@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
+    kotlin("kapt")
 }
 
 android {
@@ -21,8 +23,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            isDebuggable = true
+        }
+
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isDebuggable = false
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -45,6 +53,7 @@ val androidJunit by extra { "1.1.5" }
 val appCompat by extra { "1.6.1" }
 val coroutinesTest by extra { "1.5.2" }
 val espresso by extra { "3.5.1" }
+val hilt by extra { "2.47" }
 val junit by extra { "4.13.2" }
 val ktx by extra { "1.12.0" }
 val material by extra { "1.10.0" }
@@ -82,4 +91,13 @@ dependencies {
 
     // Logging
     implementation("com.jakewharton.timber:timber:$timber")
+
+    // Hilt for Dependency Injection
+    implementation("com.google.dagger:hilt-android:$hilt")
+    kapt("com.google.dagger:hilt-android-compiler:$hilt")
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
