@@ -17,5 +17,6 @@ data class Item(
     @SerializedName("title")
     val title: String? = null,
 
-    val isSelected: Boolean = false
+    val isSelected: Boolean = false,
+    val selectedFromCategoryId: Int? = null
 )

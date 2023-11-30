@@ -9,4 +9,6 @@ interface IEventsRepository {
     suspend fun fetchCategories(): Resource<List<Category>?>
 
     suspend fun fetchItems(categoryId: Int): Resource<List<Item>?>
+
+    suspend fun fetchSelectedItems(): Resource<List<Item>?>
 }
