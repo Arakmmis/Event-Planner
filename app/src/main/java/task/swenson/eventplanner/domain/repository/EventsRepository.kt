@@ -41,4 +41,15 @@ class EventsRepository(
                 error = TextHelper.Exception(UpsertFailure)
             )
     }
+
+    override suspend fun deleteItem(item: Item): Resource<Item> {
+        val isSuccess = localDataSource.deleteItem(item)
+
+        return if (isSuccess)
+            Resource.Success(item)
+        else
+            Resource.Error(
+                error = TextHelper.Exception(UpsertFailure)
+            )
+    }
 }

@@ -7,4 +7,6 @@ interface ILocalDataSource {
     suspend fun fetchItems(): List<Item>?
 
     suspend fun upsertItem(item: Item): Boolean
+
+    suspend fun deleteItem(item: Item): Boolean
 }

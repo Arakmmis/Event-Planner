@@ -13,9 +13,10 @@ import task.swenson.eventplanner.domain.use_case.util.getItemList
 import task.swenson.eventplanner.domain.util.InvalidItem
 import task.swenson.eventplanner.domain.util.Resource
 import task.swenson.eventplanner.domain.util.TextHelper
+import task.swenson.eventplanner.domain.util.UpsertFailure
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class UpsertItemsTest {
+class UpsertItemTest {
 
     private lateinit var upsertItem: UpsertItem
     private val repo: IEventsRepository = mock()
@@ -26,7 +27,7 @@ class UpsertItemsTest {
     }
 
     @Test
-    fun `Given one item, insert or update it and return true`() = runTest {
+    fun `Given one item, insert or update it and return it`() = runTest {
         val item = getItemList()[0]
         val stubbedResponse = Resource.Success(data = item)
 
@@ -45,5 +46,21 @@ class UpsertItemsTest {
     @Test
     fun `If item is invalid, return error`() = runTest {
         assertThat(upsertItem(Item()).error).isEqualTo(TextHelper.Exception(InvalidItem))
+    }
+
+    @Test
+    fun `If upserting fails, return error`() = runTest {
+        val item = getItemList()[0]
+        val stubbedResponse = Resource.Error<Item>(
+            error = TextHelper.Exception(UpsertFailure)
+        )
+
+        `when`(repo.upsertItem(item)).thenReturn(stubbedResponse)
+
+        val result = upsertItem(item)
+
+        assertThat(result.error).isEqualTo(
+            TextHelper.Exception(UpsertFailure)
+        )
     }
 }
