@@ -7,3 +7,5 @@ data object InvalidItem: Exception()
 data object NoInputProvided: Exception()
 
 data object NullOrEmptyOutputData: Exception()
+
+data object UpsertFailure: Exception()

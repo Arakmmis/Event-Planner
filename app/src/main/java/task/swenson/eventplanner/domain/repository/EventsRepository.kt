@@ -7,6 +7,7 @@ import task.swenson.eventplanner.domain.data_source.IRemoteDataSource
 import task.swenson.eventplanner.domain.util.NullOrEmptyOutputData
 import task.swenson.eventplanner.domain.util.Resource
 import task.swenson.eventplanner.domain.util.TextHelper
+import task.swenson.eventplanner.domain.util.UpsertFailure
 
 class EventsRepository(
     private val remoteDataSource: IRemoteDataSource,
@@ -27,6 +28,17 @@ class EventsRepository(
         else
             Resource.Error(
                 error = TextHelper.Exception(NullOrEmptyOutputData)
+            )
+    }
+
+    override suspend fun upsertItem(item: Item): Resource<Item> {
+        val isSuccess = localDataSource.upsertItem(item)
+
+        return if (isSuccess)
+            Resource.Success(item)
+        else
+            Resource.Error(
+                error = TextHelper.Exception(UpsertFailure)
             )
     }
 }
