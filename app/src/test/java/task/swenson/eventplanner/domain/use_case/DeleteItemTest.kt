@@ -45,7 +45,7 @@ class DeleteItemTest {
 
     @Test
     fun `If item is invalid, return error`() = runTest {
-        assertThat(deleteItem(Item()).error).isEqualTo(TextHelper.Exception(InvalidItem))
+        assertThat(deleteItem(Item(id = 0)).error).isEqualTo(TextHelper.Exception(InvalidItem))
     }
 
     @Test

@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
     kotlin("kapt")
 }
 
@@ -60,6 +61,7 @@ val material by extra { "1.10.0" }
 val mockito by extra { "5.7.0" }
 val okHttp by extra { "5.0.0-alpha.6" }
 val retrofit by extra { "2.9.0" }
+val room by extra { "2.6.1" }
 val timber by extra { "5.0.1" }
 val truth by extra { "1.1.3" }
 
@@ -95,6 +97,12 @@ dependencies {
     // Hilt for Dependency Injection
     implementation("com.google.dagger:hilt-android:$hilt")
     kapt("com.google.dagger:hilt-android-compiler:$hilt")
+
+    // Room
+    implementation("androidx.room:room-runtime:$room")
+    implementation("androidx.room:room-ktx:$room")
+    annotationProcessor("androidx.room:room-compiler:$room")
+    ksp("androidx.room:room-compiler:$room")
 }
 
 // Allow references to generated code

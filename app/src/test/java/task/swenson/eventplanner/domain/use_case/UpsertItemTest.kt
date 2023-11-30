@@ -45,7 +45,7 @@ class UpsertItemTest {
 
     @Test
     fun `If item is invalid, return error`() = runTest {
-        assertThat(upsertItem(Item()).error).isEqualTo(TextHelper.Exception(InvalidItem))
+        assertThat(upsertItem(Item(id = 0)).error).isEqualTo(TextHelper.Exception(InvalidItem))
     }
 
     @Test

@@ -5,7 +5,7 @@ import org.junit.Test
 import task.swenson.eventplanner.data.pojos.Item
 import task.swenson.eventplanner.domain.use_case.util.getItemList
 import task.swenson.eventplanner.domain.use_case.util.itemNoAvgBudget
-import task.swenson.eventplanner.domain.use_case.util.itemNoId
+import task.swenson.eventplanner.domain.use_case.util.itemInvalidId
 import task.swenson.eventplanner.domain.use_case.util.itemNoMaxBudget
 import task.swenson.eventplanner.domain.use_case.util.itemNoMinBudget
 import task.swenson.eventplanner.domain.use_case.util.itemNoTitle
@@ -29,7 +29,7 @@ class ValidateItemsTest {
     @Test
     fun `If item data is invalid, return error`() {
         assertThat(
-            validator(item = Item()).error
+            validator(item = Item(id = 0)).error
         ).isEqualTo(
             TextHelper.Exception(InvalidItem)
         )
@@ -38,7 +38,7 @@ class ValidateItemsTest {
     @Test
     fun `If item doesn't have id, return error`() {
         assertThat(
-            validator(item = itemNoId()).error
+            validator(item = itemInvalidId()).error
         ).isEqualTo(
             TextHelper.Exception(InvalidItem)
         )
@@ -110,7 +110,7 @@ class ValidateItemsTest {
         assertThat(
             validator(
                 items = listOf(
-                    itemNoId(),
+                    itemInvalidId(),
                     itemNoAvgBudget(),
                     itemNoTitle(),
                     itemNoMaxBudget(),
@@ -126,7 +126,7 @@ class ValidateItemsTest {
     fun `If item list contains some invalid items, return list without the invalid items`() {
         assertThat(
             validator(
-                items = getItemList() + itemNoId() + itemNoTitle()
+                items = getItemList() + itemInvalidId() + itemNoTitle()
             ).data
         ).isEqualTo(getItemList())
     }

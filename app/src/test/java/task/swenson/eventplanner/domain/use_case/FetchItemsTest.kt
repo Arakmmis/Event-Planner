@@ -79,7 +79,7 @@ class FetchItemsTest {
 
     @Test
     fun `If category id isn't valid, return error`() = runTest {
-        val stubbedResponse: Resource<List<Item>?> = Resource.Success(listOf(Item()))
+        val stubbedResponse: Resource<List<Item>?> = Resource.Success(listOf(Item(id = 0)))
         val categoryId = -1
 
         Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)

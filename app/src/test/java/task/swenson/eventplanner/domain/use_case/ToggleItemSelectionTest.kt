@@ -15,7 +15,7 @@ class ToggleItemSelectionTest {
 
     @Test
     fun `If item is invalid, return error`() {
-        val item = Item()
+        val item = Item(id = 0)
 
         val result = toggleSelection(item, 1)
 

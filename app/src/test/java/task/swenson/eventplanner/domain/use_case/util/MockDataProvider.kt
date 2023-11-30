@@ -107,8 +107,9 @@ fun selectedItem(): Item = Item(
     selectedFromCategoryId = 2
 )
 
-fun itemNoId(): Item =
+fun itemInvalidId(): Item =
     Item(
+        id = -1,
         selectedFromCategoryId = 1,
         title = "Item 1",
         imageUrl = "www.google.com",
