@@ -5,7 +5,7 @@ import task.swenson.eventplanner.data.pojos.Item
 fun getItemList(): List<Item> = listOf(
     Item(
         id = 1,
-        selectedFromCategoryId = 1,
+        selectedFromCategoryId = null,
         title = "Item 1",
         imageUrl = "www.google.com",
         minBudget = 10,
@@ -25,7 +25,7 @@ fun getItemList(): List<Item> = listOf(
     ),
     Item(
         id = 3,
-        selectedFromCategoryId = 1,
+        selectedFromCategoryId = null,
         title = "Item 3",
         imageUrl = "www.google.com",
         minBudget = 10,
@@ -45,7 +45,7 @@ fun getItemList(): List<Item> = listOf(
     ),
     Item(
         id = 5,
-        selectedFromCategoryId = 2,
+        selectedFromCategoryId = null,
         title = "Item 5",
         imageUrl = "www.google.com",
         minBudget = 10,
@@ -75,7 +75,7 @@ fun getItemList(): List<Item> = listOf(
     ),
     Item(
         id = 8,
-        selectedFromCategoryId = 3,
+        selectedFromCategoryId = null,
         title = "Item 8",
         imageUrl = "www.google.com",
         minBudget = 10,

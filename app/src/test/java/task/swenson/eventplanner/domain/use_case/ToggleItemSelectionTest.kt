@@ -2,7 +2,7 @@ package task.swenson.eventplanner.domain.use_case
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
-import task.swenson.eventplanner.data.pojos.Item
+import task.swenson.eventplanner.domain.use_case.util.itemInvalidId
 import task.swenson.eventplanner.domain.use_case.util.notSelectedItem
 import task.swenson.eventplanner.domain.use_case.util.selectedItem
 import task.swenson.eventplanner.domain.util.InvalidCategoryId
@@ -15,7 +15,7 @@ class ToggleItemSelectionTest {
 
     @Test
     fun `If item is invalid, return error`() {
-        val item = Item(id = 0)
+        val item = itemInvalidId()
 
         val result = toggleSelection(item, 1)
 

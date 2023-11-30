@@ -12,6 +12,7 @@ import org.mockito.Mockito.verify
 import task.swenson.eventplanner.data.pojos.Item
 import task.swenson.eventplanner.domain.repository.IEventsRepository
 import task.swenson.eventplanner.domain.use_case.util.getItemList
+import task.swenson.eventplanner.domain.use_case.util.itemInvalidId
 import task.swenson.eventplanner.domain.util.InvalidCategoryId
 import task.swenson.eventplanner.domain.util.NoInputProvided
 import task.swenson.eventplanner.domain.util.Resource
@@ -79,7 +80,7 @@ class FetchItemsTest {
 
     @Test
     fun `If category id isn't valid, return error`() = runTest {
-        val stubbedResponse: Resource<List<Item>?> = Resource.Success(listOf(Item(id = 0)))
+        val stubbedResponse: Resource<List<Item>?> = Resource.Success(listOf(itemInvalidId()))
         val categoryId = -1
 
         Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)

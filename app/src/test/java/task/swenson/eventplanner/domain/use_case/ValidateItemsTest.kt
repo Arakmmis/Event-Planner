@@ -2,10 +2,9 @@ package task.swenson.eventplanner.domain.use_case
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
-import task.swenson.eventplanner.data.pojos.Item
 import task.swenson.eventplanner.domain.use_case.util.getItemList
-import task.swenson.eventplanner.domain.use_case.util.itemNoAvgBudget
 import task.swenson.eventplanner.domain.use_case.util.itemInvalidId
+import task.swenson.eventplanner.domain.use_case.util.itemNoAvgBudget
 import task.swenson.eventplanner.domain.use_case.util.itemNoMaxBudget
 import task.swenson.eventplanner.domain.use_case.util.itemNoMinBudget
 import task.swenson.eventplanner.domain.use_case.util.itemNoTitle
@@ -29,7 +28,7 @@ class ValidateItemsTest {
     @Test
     fun `If item data is invalid, return error`() {
         assertThat(
-            validator(item = Item(id = 0)).error
+            validator(item = itemInvalidId()).error
         ).isEqualTo(
             TextHelper.Exception(InvalidItem)
         )

@@ -37,7 +37,7 @@ class ValidateItems {
     }
 
     private fun isItemValid(item: Item): Boolean =
-        item.id < 0
+        item.id >= 0
                 && !item.title.isNullOrEmpty()
                 && item.minBudget != null
                 && item.maxBudget != null

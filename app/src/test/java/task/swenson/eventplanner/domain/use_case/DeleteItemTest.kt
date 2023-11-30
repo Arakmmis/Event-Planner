@@ -1,7 +1,6 @@
 package task.swenson.eventplanner.domain.use_case
 
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -10,12 +9,12 @@ import org.mockito.Mockito.`when`
 import task.swenson.eventplanner.data.pojos.Item
 import task.swenson.eventplanner.domain.repository.IEventsRepository
 import task.swenson.eventplanner.domain.use_case.util.getItemList
+import task.swenson.eventplanner.domain.use_case.util.itemInvalidId
 import task.swenson.eventplanner.domain.util.DeletionFailure
 import task.swenson.eventplanner.domain.util.InvalidItem
 import task.swenson.eventplanner.domain.util.Resource
 import task.swenson.eventplanner.domain.util.TextHelper
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class DeleteItemTest {
 
     private lateinit var deleteItem: DeleteItem
@@ -45,7 +44,7 @@ class DeleteItemTest {
 
     @Test
     fun `If item is invalid, return error`() = runTest {
-        assertThat(deleteItem(Item(id = 0)).error).isEqualTo(TextHelper.Exception(InvalidItem))
+        assertThat(deleteItem(itemInvalidId()).error).isEqualTo(TextHelper.Exception(InvalidItem))
     }
 
     @Test

@@ -10,6 +10,7 @@ import org.mockito.Mockito.`when`
 import task.swenson.eventplanner.data.pojos.Item
 import task.swenson.eventplanner.domain.repository.IEventsRepository
 import task.swenson.eventplanner.domain.use_case.util.getItemList
+import task.swenson.eventplanner.domain.use_case.util.itemInvalidId
 import task.swenson.eventplanner.domain.util.InvalidItem
 import task.swenson.eventplanner.domain.util.Resource
 import task.swenson.eventplanner.domain.util.TextHelper
@@ -45,7 +46,7 @@ class UpsertItemTest {
 
     @Test
     fun `If item is invalid, return error`() = runTest {
-        assertThat(upsertItem(Item(id = 0)).error).isEqualTo(TextHelper.Exception(InvalidItem))
+        assertThat(upsertItem(itemInvalidId()).error).isEqualTo(TextHelper.Exception(InvalidItem))
     }
 
     @Test
