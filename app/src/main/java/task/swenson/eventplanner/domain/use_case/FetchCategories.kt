@@ -15,7 +15,7 @@ class FetchCategories(
 
         return if (result.data.isNullOrEmpty())
             Resource.Error(
-                message = TextHelper.Exception(NullOrEmptyOutputData)
+                error = TextHelper.Exception(NullOrEmptyOutputData)
             )
         else {
             val populatedCategories = result.data.filter {
@@ -24,7 +24,7 @@ class FetchCategories(
 
             return if (populatedCategories.isEmpty())
                 Resource.Error(
-                    message = TextHelper.Exception(NullOrEmptyOutputData)
+                    error = TextHelper.Exception(NullOrEmptyOutputData)
                 )
             else
                 Resource.Success(data = populatedCategories)

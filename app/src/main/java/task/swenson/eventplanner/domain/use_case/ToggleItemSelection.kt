@@ -5,21 +5,16 @@ import task.swenson.eventplanner.domain.util.InvalidItem
 import task.swenson.eventplanner.domain.util.Resource
 import task.swenson.eventplanner.domain.util.TextHelper
 
-class ToggleItemSelection {
+class ToggleItemSelection(
+    private val validator: ValidateItems = ValidateItems()
+) {
 
     operator fun invoke(item: Item): Resource<Item> {
-        val isValid = item.id != null
-                && !item.title.isNullOrEmpty()
-                && !item.imageUrl.isNullOrEmpty()
-                && item.minBudget != null
-                && item.maxBudget != null
-                && item.avgBudget != null
-
-        return if (isValid)
+        return if (validator(item).error == null)
             Resource.Success(item.copy(isSelected = !item.isSelected))
         else
             Resource.Error(
-                message = TextHelper.Exception(InvalidItem)
+                error = TextHelper.Exception(InvalidItem)
             )
     }
 }

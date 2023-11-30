@@ -16,7 +16,7 @@ class RemoteDataSource(private val api: Api) : IRemoteDataSource {
             Resource.Success(data = result.body())
         else
             Resource.Error(
-                message = TextHelper.Exception(HttpException(result)),
+                error = TextHelper.Exception(HttpException(result)),
                 data = result.body()
             )
     }
@@ -28,7 +28,7 @@ class RemoteDataSource(private val api: Api) : IRemoteDataSource {
             Resource.Success(data = result.body())
         else
             Resource.Error(
-                message = TextHelper.Exception(HttpException(result)),
+                error = TextHelper.Exception(HttpException(result)),
                 data = result.body()
             )
     }

@@ -1,6 +1,6 @@
 package task.swenson.eventplanner.domain.use_case
 
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import task.swenson.eventplanner.data.pojos.Item
 
@@ -14,7 +14,7 @@ class ToggleItemSelectionTest {
 
         val result = toggleSelection(item)
 
-        Truth.assertThat(result.message).isNotNull()
+        assertThat(result.error).isNotNull()
     }
 
     @Test
@@ -26,12 +26,13 @@ class ToggleItemSelectionTest {
             minBudget = 10,
             maxBudget = 100,
             avgBudget = 50,
-            isSelected = true
+            isSelected = true,
+            selectedFromCategoryId = 2
         )
 
         val result = toggleSelection(item)
 
-        Truth.assertThat(result.data?.isSelected).isFalse()
+        assertThat(result.data?.isSelected).isFalse()
     }
 
     @Test
@@ -43,11 +44,12 @@ class ToggleItemSelectionTest {
             minBudget = 10,
             maxBudget = 100,
             avgBudget = 50,
-            isSelected = false
+            isSelected = false,
+            selectedFromCategoryId = 2
         )
 
         val result = toggleSelection(item)
 
-        Truth.assertThat(result.data?.isSelected).isTrue()
+        assertThat(result.data?.isSelected).isTrue()
     }
 }

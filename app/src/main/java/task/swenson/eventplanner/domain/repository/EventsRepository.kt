@@ -26,7 +26,7 @@ class EventsRepository(
             Resource.Success(items)
         else
             Resource.Error(
-                message = TextHelper.Exception(NullOrEmptyOutputData)
+                error = TextHelper.Exception(NullOrEmptyOutputData)
             )
     }
 }

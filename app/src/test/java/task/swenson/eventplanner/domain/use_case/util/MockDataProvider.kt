@@ -84,3 +84,58 @@ fun getItemList(): List<Item> = listOf(
         isSelected = true
     )
 )
+
+fun itemNoId(): Item =
+    Item(
+        selectedFromCategoryId = 1,
+        title = "Item 1",
+        imageUrl = "www.google.com",
+        minBudget = 10,
+        maxBudget = 100,
+        avgBudget = 50,
+        isSelected = false
+    )
+
+fun itemNoTitle(): Item =
+    Item(
+        id = 1,
+        selectedFromCategoryId = 1,
+        imageUrl = "www.google.com",
+        minBudget = 10,
+        maxBudget = 100,
+        avgBudget = 50,
+        isSelected = false
+    )
+
+fun itemNoMinBudget(): Item =
+    Item(
+        id = 1,
+        selectedFromCategoryId = 1,
+        title = "Item 1",
+        imageUrl = "www.google.com",
+        maxBudget = 100,
+        avgBudget = 50,
+        isSelected = false
+    )
+
+fun itemNoMaxBudget(): Item =
+    Item(
+        id = 1,
+        selectedFromCategoryId = 1,
+        title = "Item 1",
+        imageUrl = "www.google.com",
+        minBudget = 10,
+        avgBudget = 50,
+        isSelected = false
+    )
+
+fun itemNoAvgBudget(): Item =
+    Item(
+        id = 1,
+        selectedFromCategoryId = 1,
+        title = "Item 1",
+        imageUrl = "www.google.com",
+        minBudget = 10,
+        maxBudget = 100,
+        isSelected = false
+    )

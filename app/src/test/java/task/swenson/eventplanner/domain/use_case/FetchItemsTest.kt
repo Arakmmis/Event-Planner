@@ -14,7 +14,6 @@ import task.swenson.eventplanner.domain.repository.IEventsRepository
 import task.swenson.eventplanner.domain.use_case.util.getItemList
 import task.swenson.eventplanner.domain.util.InvalidCategoryId
 import task.swenson.eventplanner.domain.util.NoInputProvided
-import task.swenson.eventplanner.domain.util.NullOrEmptyOutputData
 import task.swenson.eventplanner.domain.util.Resource
 import task.swenson.eventplanner.domain.util.TextHelper
 
@@ -75,7 +74,7 @@ class FetchItemsTest {
     fun `Given no category id and unselected items, return error`() = runTest {
         val result = fetchItems()
 
-        assertThat(result.message).isEqualTo(TextHelper.Exception(NoInputProvided))
+        assertThat(result.error).isEqualTo(TextHelper.Exception(NoInputProvided))
     }
 
     @Test
@@ -87,7 +86,7 @@ class FetchItemsTest {
 
         val result: Resource<List<Item>?> = fetchItems(categoryId)
 
-        assertThat(result.message).isEqualTo(TextHelper.Exception(InvalidCategoryId))
+        assertThat(result.error).isEqualTo(TextHelper.Exception(InvalidCategoryId))
     }
 
     /**
@@ -139,107 +138,5 @@ class FetchItemsTest {
         assertThat(result.data).isEqualTo(
             stubbedResponse.data?.filter { it.isSelected }
         )
-    }
-
-    @Test
-    fun `If category items are null, return error`() = runTest {
-        val stubbedResponse: Resource<List<Item>?> = Resource.Success(data = null)
-        val categoryId = 1
-
-        Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
-
-        val result = fetchItems(categoryId)
-
-        assertThat(result.message).isEqualTo(TextHelper.Exception(NullOrEmptyOutputData))
-    }
-
-    @Test
-    fun `If category items are empty, return error`() = runTest {
-        val stubbedResponse: Resource<List<Item>?> = Resource.Success(data = emptyList())
-        val categoryId = 1
-
-        Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
-
-        val result = fetchItems(categoryId)
-
-        assertThat(result.message).isEqualTo(TextHelper.Exception(NullOrEmptyOutputData))
-    }
-
-    @Test
-    fun `If selected category items are null, return error`() = runTest {
-        val stubbedResponse: Resource<List<Item>?> = Resource.Success(data = null)
-        val categoryId = 1
-
-        Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
-
-        val result = fetchItems(categoryId, true)
-
-        assertThat(result.message).isEqualTo(TextHelper.Exception(NullOrEmptyOutputData))
-    }
-
-    @Test
-    fun `If selected category items are empty, return error`() = runTest {
-        val stubbedResponse: Resource<List<Item>?> = Resource.Success(data = emptyList())
-        val categoryId = 1
-
-        Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
-
-        val result = fetchItems(categoryId, true)
-
-        assertThat(result.message).isEqualTo(TextHelper.Exception(NullOrEmptyOutputData))
-    }
-
-    @Test
-    fun `If selected items are null, return error`() = runTest {
-        val stubbedResponse: Resource<List<Item>?> = Resource.Success(data = null)
-        Mockito.`when`(repo.fetchSelectedItems()).thenReturn(stubbedResponse)
-
-        val result = fetchItems(isSelected = true)
-
-        assertThat(result.message).isEqualTo(TextHelper.Exception(NullOrEmptyOutputData))
-    }
-
-    @Test
-    fun `If selected items are empty, return error`() = runTest {
-        val stubbedResponse: Resource<List<Item>?> = Resource.Success(data = emptyList())
-        Mockito.`when`(repo.fetchSelectedItems()).thenReturn(stubbedResponse)
-
-        val result = fetchItems(isSelected = true)
-
-        assertThat(result.message).isEqualTo(TextHelper.Exception(NullOrEmptyOutputData))
-    }
-
-    @Test
-    fun `If category items data in list are null or empty, return error`() = runTest {
-        val stubbedResponse: Resource<List<Item>?> = Resource.Success(listOf(Item()))
-        val categoryId = 1
-
-        Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
-
-        val result = fetchItems(categoryId)
-
-        assertThat(result.message).isEqualTo(TextHelper.Exception(NullOrEmptyOutputData))
-    }
-
-    @Test
-    fun `If selected category items data in list are null or empty, return error`() = runTest {
-        val stubbedResponse: Resource<List<Item>?> = Resource.Success(listOf(Item()))
-        val categoryId = 1
-
-        Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
-
-        val result = fetchItems(categoryId, true)
-
-        assertThat(result.message).isEqualTo(TextHelper.Exception(NullOrEmptyOutputData))
-    }
-
-    @Test
-    fun `If selected items data in list are null or empty, return error`() = runTest {
-        val stubbedResponse: Resource<List<Item>?> = Resource.Success(listOf(Item()))
-        Mockito.`when`(repo.fetchSelectedItems()).thenReturn(stubbedResponse)
-
-        val result = fetchItems(isSelected = true)
-
-        assertThat(result.message).isEqualTo(TextHelper.Exception(NullOrEmptyOutputData))
     }
 }

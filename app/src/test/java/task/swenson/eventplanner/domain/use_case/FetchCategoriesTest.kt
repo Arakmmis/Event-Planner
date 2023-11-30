@@ -49,7 +49,7 @@ class FetchCategoriesTest {
 
         val result = fetchCategories()
 
-        assertThat(result.message).isNotNull()
+        assertThat(result.error).isNotNull()
     }
 
     @Test
@@ -60,7 +60,7 @@ class FetchCategoriesTest {
 
         val result = fetchCategories()
 
-        assertThat(result.message).isNotNull()
+        assertThat(result.error).isNotNull()
     }
 
     @Test
@@ -70,6 +70,6 @@ class FetchCategoriesTest {
 
         val result = fetchCategories()
 
-        assertThat(result.message).isNotNull()
+        assertThat(result.error).isNotNull()
     }
 }
