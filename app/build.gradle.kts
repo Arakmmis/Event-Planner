@@ -47,11 +47,26 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
+    }
 }
 
 // App Dependencies (A-Z)
 val androidJunit by extra { "1.1.5" }
 val appCompat by extra { "1.6.1" }
+val coil by extra { "2.5.0" }
+val compose by extra { "1.5.4" }
+val composeActivity by extra { "1.8.1" }
+val composeHilt by extra { "1.1.0" }
+val composeNavigation by extra { "2.7.5" }
+val composeViewModel by extra { "2.6.2" }
 val coroutinesTest by extra { "1.5.2" }
 val espresso by extra { "3.5.1" }
 val hilt by extra { "2.47" }
@@ -72,6 +87,17 @@ dependencies {
     // UI
     implementation("androidx.appcompat:appcompat:$appCompat")
     implementation("com.google.android.material:material:$material")
+
+    // Compose
+    implementation("androidx.activity:activity-compose:$composeActivity")
+    implementation("androidx.compose.material:material:$compose")
+    implementation("androidx.compose.foundation:foundation:$compose")
+    implementation("androidx.compose.ui:ui:$compose")
+    implementation("androidx.compose.ui:ui-tooling:$compose")
+    implementation("androidx.compose.ui:ui-tooling-preview:$compose")
+    implementation("androidx.navigation:navigation-compose:$composeNavigation")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$composeViewModel")
+    debugImplementation("androidx.compose.ui:ui-tooling:$compose")
 
     // Testing
     testImplementation("junit:junit:$junit")
@@ -97,12 +123,16 @@ dependencies {
     // Hilt for Dependency Injection
     implementation("com.google.dagger:hilt-android:$hilt")
     kapt("com.google.dagger:hilt-android-compiler:$hilt")
+    implementation("androidx.hilt:hilt-navigation-compose:$composeHilt")
 
     // Room
     implementation("androidx.room:room-runtime:$room")
     implementation("androidx.room:room-ktx:$room")
     annotationProcessor("androidx.room:room-compiler:$room")
     ksp("androidx.room:room-compiler:$room")
+
+    // Coil for Imaging Loading
+    implementation("io.coil-kt:coil-compose:$coil")
 }
 
 // Allow references to generated code
