@@ -125,7 +125,7 @@ fun CategoryCard(
 
                 Icon(
                     modifier = Modifier.size(14.dp),
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow),
                     contentDescription = null,
                     tint = BreakerBay
                 )
