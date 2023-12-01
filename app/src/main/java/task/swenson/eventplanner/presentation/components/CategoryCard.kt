@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,6 +21,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -37,7 +39,6 @@ import task.swenson.eventplanner.R
 import task.swenson.eventplanner.data.pojos.Category
 import task.swenson.eventplanner.presentation.theme.BreakerBay
 import task.swenson.eventplanner.presentation.theme.DarkGray
-import task.swenson.eventplanner.presentation.theme.MoonMist
 import task.swenson.eventplanner.presentation.theme.Shape
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -49,8 +50,12 @@ fun CategoryCard(
     onClick: (category: Category) -> Unit
 ) {
     Card(
-        modifier = modifier,
-        backgroundColor = MoonMist,
+        modifier = modifier
+            .shadow(
+                elevation = 2.dp,
+                shape = Shape.medium
+            ),
+        backgroundColor = Color.White,
         shape = Shape.medium,
         border = if (selectedItems != 0)
             BorderStroke(width = 2.dp, color = BreakerBay)
@@ -65,6 +70,7 @@ fun CategoryCard(
                 modifier = Modifier.wrapContentWidth()
             ) {
                 AsyncImage(
+                    modifier = Modifier.height(120.dp),
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(category.imageUrl)
                         .crossfade(true)
