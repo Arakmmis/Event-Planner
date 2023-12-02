@@ -6,4 +6,5 @@
     <string name="title_event_builder">Event Builder</string>
     <string name="subtitle_event_builder">Add to your event to view our cost estimate.</string>
     <string name="btn_save">Save</string>
+    <string name="event_saved">Event Saved!</string>
 </resources>

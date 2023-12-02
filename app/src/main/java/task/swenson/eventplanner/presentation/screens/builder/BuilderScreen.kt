@@ -37,17 +37,19 @@ import task.swenson.eventplanner.presentation.components.CategoryCard
 import task.swenson.eventplanner.presentation.components.Header
 import task.swenson.eventplanner.presentation.screens.error.ErrorScreen
 import task.swenson.eventplanner.presentation.theme.BreakerBay
+import task.swenson.eventplanner.presentation.theme.MiddleGray
 import task.swenson.eventplanner.presentation.theme.Shape
 import task.swenson.eventplanner.presentation.util.OnLifecycleEvent
 
 @Composable
 fun BuilderScreen(
     vm: BuilderViewModel = hiltViewModel(),
-    onNavigationToList: (categoryId: Int) -> Unit
+    onNavigateToList: (categoryId: Int) -> Unit,
+    onNavigateToTotalBudget: (budget: Int) -> Unit
 ) {
     val state by vm.state.collectAsState()
 
-    LaunchEffects(vm.sideEffects, onNavigationToList)
+    LaunchEffects(vm.sideEffects, onNavigateToList, onNavigateToTotalBudget)
 
     OnLifecycleEvent { _, event ->
         when (event) {
@@ -122,6 +124,7 @@ fun CategoriesList(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
+            enabled = state.totalBudget != null && state.totalBudget > 0,
             shape = Shape.medium,
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = BreakerBay
@@ -136,7 +139,10 @@ fun CategoriesList(
                 text = stringResource(R.string.btn_save),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.White,
+                color = if (state.totalBudget != null && state.totalBudget > 0)
+                    Color.White
+                else
+                    MiddleGray,
                 textAlign = TextAlign.Center
             )
         }
@@ -146,7 +152,8 @@ fun CategoriesList(
 @Composable
 fun LaunchEffects(
     sideEffects: Flow<BuilderSideEffects>,
-    onNavigateToList: (categoryId: Int) -> Unit
+    onNavigateToList: (categoryId: Int) -> Unit,
+    onNavigateToTotalBudget: (budget: Int) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -156,7 +163,8 @@ fun LaunchEffects(
                 is BuilderSideEffects.NavigateToItemsList ->
                     onNavigateToList(effect.categoryId)
 
-                is BuilderSideEffects.NavigateToTotalBudget -> {}
+                is BuilderSideEffects.NavigateToTotalBudget ->
+                    onNavigateToTotalBudget(effect.totalBudget)
             }
         }
     }
