@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import task.swenson.eventplanner.domain.use_case.FetchCategories
 import task.swenson.eventplanner.domain.use_case.FetchItems
+import task.swenson.eventplanner.domain.use_case.SumItemsCost
 import task.swenson.eventplanner.domain.util.NullOrEmptyOutputData
 import task.swenson.eventplanner.domain.util.TextHelper
 import task.swenson.eventplanner.util.StateReducerFlow
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class BuilderViewModel @Inject constructor(
     private val fetchCategories: FetchCategories,
-    private val fetchItems: FetchItems
+    private val fetchItems: FetchItems,
+    private val sumItemsCost: SumItemsCost
 ) : ViewModel() {
 
     val state = StateReducerFlow(
@@ -129,8 +131,13 @@ class BuilderViewModel @Inject constructor(
             return@launch
         }
 
-        val totalBudget = response.data.map { it.avgBudget }.sumOf { it ?: 0 }
+        val totalBudget = sumItemsCost(response.data)
 
-        state.handleEvent(BuilderEvent.TotalBudgetLoaded(totalBudget))
+        if (totalBudget.error != null) {
+            state.handleEvent(BuilderEvent.ErrorLoading(totalBudget.error))
+            return@launch
+        }
+
+        state.handleEvent(BuilderEvent.TotalBudgetLoaded(totalBudget.data ?: 0))
     }
 }
