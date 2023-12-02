@@ -106,11 +106,6 @@ class BuilderViewModel @Inject constructor(
 
         val selectedItems = fetchItems(isSelected = true)
 
-        if (selectedItems.error != null) {
-            state.handleEvent(BuilderEvent.ErrorLoading(selectedItems.error))
-            return@launch
-        }
-
         val updatedCategories: List<Category> = response.data.map { category ->
             var accumulator = 0
 
