@@ -29,14 +29,22 @@ class FetchItems @Inject constructor(
             if (result.error != null)
                 return result
 
+            val localSelectedItems = repo.fetchSelectedItems()
+
+            val updatedResult = Resource.Success(
+                data = result.data?.map { remoteItem ->
+                    localSelectedItems.data?.find { it.id == remoteItem.id } ?: remoteItem
+                }
+            )
+
             return if (isSelected) {
                 validator(
-                    result.data?.filter {
+                    updatedResult.data?.filter {
                         it.selectedFromCategoryId == categoryId && it.isSelected
                     }
                 )
             } else
-                validator(result.data)
+                validator(updatedResult.data)
 
         } else if (isSelected) {
             val result = repo.fetchSelectedItems()

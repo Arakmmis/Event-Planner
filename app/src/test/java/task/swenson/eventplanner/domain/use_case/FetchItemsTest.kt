@@ -1,7 +1,6 @@
 package task.swenson.eventplanner.domain.use_case
 
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -12,13 +11,11 @@ import org.mockito.Mockito.verify
 import task.swenson.eventplanner.data.pojos.Item
 import task.swenson.eventplanner.domain.repository.IEventsRepository
 import task.swenson.eventplanner.domain.use_case.util.getItemList
-import task.swenson.eventplanner.domain.use_case.util.itemInvalidId
 import task.swenson.eventplanner.domain.util.InvalidCategoryId
 import task.swenson.eventplanner.domain.util.NoInputProvided
 import task.swenson.eventplanner.domain.util.Resource
 import task.swenson.eventplanner.domain.util.TextHelper
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class FetchItemsTest {
 
     private lateinit var fetchItems: FetchItems
@@ -39,10 +36,24 @@ class FetchItemsTest {
         val categoryId = 1
 
         Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
+        Mockito.`when`(repo.fetchSelectedItems()).thenReturn(stubbedResponse)
 
         fetchItems(categoryId)
 
         verify(repo, times(1)).fetchItems(categoryId)
+    }
+
+    @Test
+    fun `Given category id and unselected items, verify fetchSelectedItems is called`() = runTest {
+        val stubbedResponse: Resource<List<Item>?> = Resource.Success(emptyList())
+        val categoryId = 1
+
+        Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
+        Mockito.`when`(repo.fetchSelectedItems()).thenReturn(stubbedResponse)
+
+        fetchItems(categoryId)
+
+        verify(repo, times(1)).fetchSelectedItems()
     }
 
     @Test
@@ -51,6 +62,7 @@ class FetchItemsTest {
         val categoryId = 1
 
         Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
+        Mockito.`when`(repo.fetchSelectedItems()).thenReturn(stubbedResponse)
 
         fetchItems(categoryId, true)
 
@@ -58,8 +70,22 @@ class FetchItemsTest {
     }
 
     @Test
+    fun `Given category id and selected items, verify fetchSelectedItems is called`() = runTest {
+        val stubbedResponse: Resource<List<Item>?> = Resource.Success(emptyList())
+        val categoryId = 1
+
+        Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
+        Mockito.`when`(repo.fetchSelectedItems()).thenReturn(stubbedResponse)
+
+        fetchItems(categoryId, true)
+
+        verify(repo, times(1)).fetchSelectedItems()
+    }
+
+    @Test
     fun `Given no category id and selected items, verify fetchSelectedItems is called`() = runTest {
         val stubbedResponse: Resource<List<Item>?> = Resource.Success(emptyList())
+
         Mockito.`when`(repo.fetchSelectedItems()).thenReturn(stubbedResponse)
 
         fetchItems(isSelected = true)
@@ -80,10 +106,14 @@ class FetchItemsTest {
 
     @Test
     fun `If category id isn't valid, return error`() = runTest {
-        val stubbedResponse: Resource<List<Item>?> = Resource.Success(listOf(itemInvalidId()))
+        val stubbedResponse: Resource<List<Item>?> = Resource.Success(getItemList())
+        val stubbedSelectedItems: Resource<List<Item>?> =
+            Resource.Success(getItemList().filter { it.isSelected })
+
         val categoryId = -1
 
         Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
+        Mockito.`when`(repo.fetchSelectedItems()).thenReturn(stubbedSelectedItems)
 
         val result: Resource<List<Item>?> = fetchItems(categoryId)
 
@@ -97,9 +127,13 @@ class FetchItemsTest {
     @Test
     fun `Given category id and unselected items, return all category items`() = runTest {
         val stubbedResponse: Resource<List<Item>?> = Resource.Success(getItemList())
+        val stubbedSelectedItems: Resource<List<Item>?> =
+            Resource.Success(getItemList().filter { it.isSelected })
+
         val categoryId = 1
 
         Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
+        Mockito.`when`(repo.fetchSelectedItems()).thenReturn(stubbedSelectedItems)
 
         val result: Resource<List<Item>?> = fetchItems(categoryId)
 
@@ -109,9 +143,13 @@ class FetchItemsTest {
     @Test
     fun `Given category id and selected items, return only category selected items`() = runTest {
         val stubbedResponse: Resource<List<Item>?> = Resource.Success(getItemList())
+        val stubbedSelectedItems: Resource<List<Item>?> =
+            Resource.Success(getItemList().filter { it.isSelected })
+
         val categoryId = 1
 
         Mockito.`when`(repo.fetchItems(categoryId)).thenReturn(stubbedResponse)
+        Mockito.`when`(repo.fetchSelectedItems()).thenReturn(stubbedSelectedItems)
 
         val result: Resource<List<Item>?> = fetchItems(
             categoryId = categoryId,
