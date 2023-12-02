@@ -57,7 +57,7 @@ fun CategoryCard(
             ),
         backgroundColor = Color.White,
         shape = Shape.medium,
-        border = if (category.selectedItems != null && category.selectedItems > 0)
+        border = if (category.selectedItems > 0)
             BorderStroke(width = 2.dp, color = BreakerBay)
         else
             BorderStroke(width = 0.dp, color = BreakerBay),
@@ -67,7 +67,8 @@ fun CategoryCard(
     ) {
         Column {
             Box(
-                modifier = Modifier.wrapContentWidth()
+                modifier = Modifier.wrapContentWidth(),
+                contentAlignment = Alignment.Center
             ) {
                 AsyncImage(
                     modifier = Modifier.height(120.dp),
@@ -80,12 +81,11 @@ fun CategoryCard(
                     contentScale = ContentScale.Crop
                 )
 
-                if (category.selectedItems != null
-                    && category.selectedItems > 0
-                ) {
+                if (category.selectedItems > 0) {
                     Text(
                         modifier = Modifier
                             .padding(8.dp)
+                            .align(Alignment.TopEnd)
                             .border(
                                 width = 0.5.dp,
                                 color = Color.White,
@@ -96,8 +96,7 @@ fun CategoryCard(
                                 shape = RoundedCornerShape(16.dp)
                             )
                             .size(28.dp)
-                            .padding(vertical = 4.dp)
-                            .align(Alignment.TopEnd),
+                            .padding(4.dp),
                         text = String.format("%02d", category.selectedItems),
                         textAlign = TextAlign.Center,
                         color = Color.White,

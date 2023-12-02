@@ -176,11 +176,13 @@ class ItemsViewModel @Inject constructor(
         val response = fetchItems(categoryId, isSelected = true)
 
         if (response.error != null) {
+            state.handleEvent(ItemsEvent.TotalBudgetLoaded())
             state.handleEvent(ItemsEvent.ErrorLoading(response.error))
             return@launch
         }
 
         if (response.data.isNullOrEmpty()) {
+            state.handleEvent(ItemsEvent.TotalBudgetLoaded())
             state.handleEvent(
                 ItemsEvent.ErrorLoading(TextHelper.Exception(NullOrEmptyOutputData))
             )

@@ -104,18 +104,43 @@ class BuilderViewModel @Inject constructor(
             return@launch
         }
 
-        state.handleEvent(BuilderEvent.CategoriesLoaded(response.data))
+        val selectedItems = fetchItems(isSelected = true)
+
+        if (selectedItems.error != null) {
+            state.handleEvent(BuilderEvent.ErrorLoading(selectedItems.error))
+            return@launch
+        }
+
+        val updatedCategories: List<Category> = response.data.map { category ->
+            var accumulator = 0
+
+            selectedItems.data?.forEach {
+                if (it.selectedFromCategoryId == category.id)
+                    accumulator++
+            }
+
+            return@map Category(
+                id = category.id,
+                title = category.title,
+                imageUrl = category.imageUrl,
+                selectedItems = accumulator
+            )
+        }
+
+        state.handleEvent(BuilderEvent.CategoriesLoaded(updatedCategories))
     }
 
     private fun getTotalBudget() = viewModelScope.launch {
         val response = fetchItems(isSelected = true)
 
         if (response.error != null) {
+            state.handleEvent(BuilderEvent.TotalBudgetLoaded())
             state.handleEvent(BuilderEvent.ErrorLoading(response.error))
             return@launch
         }
 
         if (response.data.isNullOrEmpty()) {
+            state.handleEvent(BuilderEvent.TotalBudgetLoaded())
             state.handleEvent(
                 BuilderEvent.ErrorLoading(TextHelper.Exception(NullOrEmptyOutputData))
             )
@@ -129,7 +154,7 @@ class BuilderViewModel @Inject constructor(
             return@launch
         }
 
-        state.handleEvent(BuilderEvent.TotalBudgetLoaded(totalBudget.data ?: 0))
+        state.handleEvent(BuilderEvent.TotalBudgetLoaded(totalBudget.data))
     }
 
     private fun sendEffect(category: Category) = viewModelScope.launch {

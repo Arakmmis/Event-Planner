@@ -8,7 +8,7 @@ sealed class BuilderEvent {
 
     data class CategoriesLoaded(val categories: List<Category>) : BuilderEvent()
 
-    data class TotalBudgetLoaded(val totalBudget: Int): BuilderEvent()
+    data class TotalBudgetLoaded(val totalBudget: Int? = null): BuilderEvent()
 
     data class CategoryClicked(val category: Category) : BuilderEvent()
 

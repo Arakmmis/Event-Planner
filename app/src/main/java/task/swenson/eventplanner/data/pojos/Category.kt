@@ -11,5 +11,5 @@ class Category(
     @SerializedName("title")
     val title: String? = null,
 
-    val selectedItems: Int? = null
+    val selectedItems: Int = 0
 )
