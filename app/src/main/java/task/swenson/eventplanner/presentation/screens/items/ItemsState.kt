@@ -6,6 +6,7 @@ import task.swenson.eventplanner.domain.util.TextHelper
 data class ItemsState(
     val isLoading: Boolean = true,
     val items: List<Item> = emptyList(),
-    val totalBudget: Int? = null,
+    val minBudget: Int? = null,
+    val maxBudget: Int? = null,
     val error: TextHelper? = null
 )

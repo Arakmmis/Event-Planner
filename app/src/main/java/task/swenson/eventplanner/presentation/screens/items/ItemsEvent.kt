@@ -8,9 +8,12 @@ sealed class ItemsEvent {
 
     data class ItemsLoaded(val items: List<Item>) : ItemsEvent()
 
-    data class TotalBudgetLoaded(val totalBudget: Int) : ItemsEvent()
+    data class TotalBudgetLoaded(
+        val minBudget: Int,
+        val maxBudget: Int
+    ) : ItemsEvent()
 
-    data class ItemUpdated(val item: Item): ItemsEvent()
+    data class ItemUpdated(val item: Item) : ItemsEvent()
 
     data class ItemClicked(val item: Item) : ItemsEvent()
 

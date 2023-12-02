@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 import task.swenson.eventplanner.data.pojos.Item
 import task.swenson.eventplanner.domain.use_case.DeleteItem
 import task.swenson.eventplanner.domain.use_case.FetchItems
-import task.swenson.eventplanner.domain.use_case.SumItemsCost
 import task.swenson.eventplanner.domain.use_case.ToggleItemSelection
 import task.swenson.eventplanner.domain.use_case.UpsertItem
 import task.swenson.eventplanner.domain.util.NullOrEmptyOutputData
@@ -23,7 +22,6 @@ class ItemsViewModel @Inject constructor(
     private val fetchItems: FetchItems,
     private val upsertItem: UpsertItem,
     private val deleteItem: DeleteItem,
-    private val sumItemsCost: SumItemsCost,
     private val toggleItemSelection: ToggleItemSelection
 ) : ViewModel() {
 
@@ -53,7 +51,11 @@ class ItemsViewModel @Inject constructor(
         }
 
         is ItemsEvent.TotalBudgetLoaded ->
-            state.copy(isLoading = false, totalBudget = event.totalBudget)
+            state.copy(
+                isLoading = false,
+                minBudget = event.minBudget,
+                maxBudget = event.maxBudget
+            )
 
         is ItemsEvent.ItemClicked -> {
             toggleItem(event.item, categoryId)
@@ -185,13 +187,9 @@ class ItemsViewModel @Inject constructor(
             return@launch
         }
 
-        val totalBudget = sumItemsCost(response.data)
+        val minBudget = response.data.sumOf { it.minBudget ?: 0 }
+        val maxBudget = response.data.sumOf { it.maxBudget ?: 0 }
 
-        if (totalBudget.error != null) {
-            state.handleEvent(ItemsEvent.ErrorLoading(totalBudget.error))
-            return@launch
-        }
-
-        state.handleEvent(ItemsEvent.TotalBudgetLoaded(totalBudget.data ?: 0))
+        state.handleEvent(ItemsEvent.TotalBudgetLoaded(minBudget, maxBudget))
     }
 }

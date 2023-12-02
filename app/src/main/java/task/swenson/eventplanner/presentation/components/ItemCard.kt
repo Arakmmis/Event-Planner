@@ -71,7 +71,7 @@ fun ItemCard(
                         .padding(8.dp)
                         .size(28.dp)
                         .align(Alignment.TopEnd)
-                        .shadow(elevation = 5.dp),
+                        .shadow(elevation = 4.dp),
                     painter =
                         if (item.isSelected)
                             painterResource(id = R.drawable.ic_selected)

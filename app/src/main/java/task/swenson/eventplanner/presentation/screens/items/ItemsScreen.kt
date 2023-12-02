@@ -94,7 +94,8 @@ fun ItemsList(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .align(Alignment.CenterHorizontally),
-            avgBudget = state.totalBudget
+            minBudget = state.minBudget,
+            maxBudget = state.maxBudget
         )
 
         Spacer(modifier = Modifier.size(24.dp))
