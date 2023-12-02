@@ -48,7 +48,12 @@ class BuilderViewModel @Inject constructor(
         is BuilderEvent.CategoryClicked -> {
             viewModelScope.launch {
                 event.category.id?.let {
-                    sideEffectsChannel.send(BuilderSideEffects.NavigateToItemsList(it))
+                    sideEffectsChannel.send(
+                        BuilderSideEffects.NavigateToItemsList(
+                            it,
+                            event.category.title ?: ""
+                        )
+                    )
                 }
             }
 

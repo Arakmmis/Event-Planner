@@ -1,6 +1,7 @@
 package task.swenson.eventplanner.presentation.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -33,6 +35,8 @@ fun Header(
     showBackButton: Boolean,
     onBackClicked: () -> Unit = {}
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    
     Column(
         modifier = modifier
             .padding(horizontal = 24.dp)
@@ -41,9 +45,12 @@ fun Header(
         if (showBackButton)
             Icon(
                 modifier = Modifier
-                    .size(25.dp)
+                    .size(18.dp)
                     .scale(scaleX = -1f, scaleY = 1f)
-                    .clickable { onBackClicked() },
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) { onBackClicked() },
                 painter = painterResource(id = R.drawable.ic_arrow),
                 contentDescription = null,
             )

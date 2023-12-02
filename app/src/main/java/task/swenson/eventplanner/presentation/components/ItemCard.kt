@@ -37,7 +37,7 @@ import task.swenson.eventplanner.presentation.theme.Shape
 fun ItemCard(
     modifier: Modifier = Modifier,
     item: Item,
-    onClick: (item: Item) -> Unit
+    handleEvent: (item: Item) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -48,7 +48,7 @@ fun ItemCard(
         backgroundColor = Color.White,
         shape = Shape.medium,
         onClick = {
-            onClick(item)
+            handleEvent(item)
         }
     ) {
         Column {
@@ -70,13 +70,14 @@ fun ItemCard(
                     modifier = Modifier
                         .padding(8.dp)
                         .size(28.dp)
-                        .align(Alignment.TopEnd),
-                    painter = painterResource(
+                        .align(Alignment.TopEnd)
+                        .shadow(elevation = 5.dp),
+                    painter =
                         if (item.isSelected)
-                            R.drawable.ic_selected
+                            painterResource(id = R.drawable.ic_selected)
                         else
-                            R.drawable.ic_add
-                    ),
+                            painterResource(id = R.drawable.ic_add)
+                    ,
                     contentDescription = null
                 )
             }

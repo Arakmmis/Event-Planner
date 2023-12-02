@@ -44,7 +44,7 @@ import task.swenson.eventplanner.presentation.util.OnLifecycleEvent
 @Composable
 fun BuilderScreen(
     vm: BuilderViewModel = hiltViewModel(),
-    onNavigateToList: (categoryId: Int) -> Unit,
+    onNavigateToList: (categoryId: Int, categoryName: String) -> Unit,
     onNavigateToTotalBudget: (budget: Int) -> Unit
 ) {
     val state by vm.state.collectAsState()
@@ -152,7 +152,7 @@ fun CategoriesList(
 @Composable
 fun LaunchEffects(
     sideEffects: Flow<BuilderSideEffects>,
-    onNavigateToList: (categoryId: Int) -> Unit,
+    onNavigateToList: (categoryId: Int, categoryName: String) -> Unit,
     onNavigateToTotalBudget: (budget: Int) -> Unit
 ) {
     val context = LocalContext.current
@@ -161,7 +161,7 @@ fun LaunchEffects(
         sideEffects.collect { effect ->
             when (effect) {
                 is BuilderSideEffects.NavigateToItemsList ->
-                    onNavigateToList(effect.categoryId)
+                    onNavigateToList(effect.categoryId, effect.categoryName)
 
                 is BuilderSideEffects.NavigateToTotalBudget ->
                     onNavigateToTotalBudget(effect.totalBudget)
