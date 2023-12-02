@@ -43,7 +43,7 @@ private fun getBudget(
     else if (minBudget != null && maxBudget != null)
         "$$minBudget-$$maxBudget"
     else
-        ""
+        "-"
 
 @Preview(showBackground = true)
 @Composable

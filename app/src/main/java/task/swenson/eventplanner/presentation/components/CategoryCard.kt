@@ -37,6 +37,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import task.swenson.eventplanner.R
 import task.swenson.eventplanner.data.pojos.Category
+import task.swenson.eventplanner.presentation.screens.builder.BuilderEvent
 import task.swenson.eventplanner.presentation.theme.BreakerBay
 import task.swenson.eventplanner.presentation.theme.DarkGray
 import task.swenson.eventplanner.presentation.theme.Shape
@@ -46,8 +47,7 @@ import task.swenson.eventplanner.presentation.theme.Shape
 fun CategoryCard(
     modifier: Modifier = Modifier,
     category: Category,
-    selectedItems: Int = 0,
-    onClick: (category: Category) -> Unit
+    handleEvent: (BuilderEvent) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -57,12 +57,12 @@ fun CategoryCard(
             ),
         backgroundColor = Color.White,
         shape = Shape.medium,
-        border = if (selectedItems != 0)
+        border = if (category.selectedItems != null && category.selectedItems > 0)
             BorderStroke(width = 2.dp, color = BreakerBay)
         else
             BorderStroke(width = 0.dp, color = BreakerBay),
         onClick = {
-            onClick(category)
+            handleEvent(BuilderEvent.CategoryClicked(category))
         }
     ) {
         Column {
@@ -80,7 +80,9 @@ fun CategoryCard(
                     contentScale = ContentScale.Crop
                 )
 
-                if (selectedItems > 0) {
+                if (category.selectedItems != null
+                    && category.selectedItems > 0
+                ) {
                     Text(
                         modifier = Modifier
                             .padding(8.dp)
@@ -96,7 +98,7 @@ fun CategoryCard(
                             .size(28.dp)
                             .padding(vertical = 4.dp)
                             .align(Alignment.TopEnd),
-                        text = String.format("%02d", selectedItems),
+                        text = String.format("%02d", category.selectedItems),
                         textAlign = TextAlign.Center,
                         color = Color.White,
                         fontSize = 14.sp,
@@ -143,9 +145,9 @@ fun CategoryCardPreview() {
         category = Category(
             id = 1,
             title = "Staff",
-            imageUrl = ""
+            imageUrl = "",
+            selectedItems = 99
         ),
-        selectedItems = 99
     ) {
         // Do Nothing
     }

@@ -9,5 +9,7 @@ class Category(
     @SerializedName("image")
     val imageUrl: String? = null,
     @SerializedName("title")
-    val title: String? = null
+    val title: String? = null,
+
+    val selectedItems: Int? = null
 )

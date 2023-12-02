@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">EventPlanner</string>
+
+    <string name="err_try_again">Oops, something went wrong! Please try again!</string>
+
+    <string name="title_event_builder">Event Builder</string>
+    <string name="subtitle_event_builder">Add to your event to view our cost estimate.</string>
+    <string name="btn_save">Save</string>
 </resources>
