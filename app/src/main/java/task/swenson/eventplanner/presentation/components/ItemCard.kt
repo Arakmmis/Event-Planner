@@ -1,5 +1,6 @@
 package task.swenson.eventplanner.presentation.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,9 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -66,18 +67,20 @@ fun ItemCard(
                     contentScale = ContentScale.Crop
                 )
 
-                Icon(
+                Image(
                     modifier = Modifier
                         .padding(8.dp)
                         .size(28.dp)
                         .align(Alignment.TopEnd)
-                        .shadow(elevation = 4.dp),
-                    painter =
-                        if (item.isSelected)
-                            painterResource(id = R.drawable.ic_selected)
-                        else
-                            painterResource(id = R.drawable.ic_add)
-                    ,
+                        .shadow(
+                            elevation = 4.dp,
+                            shape = RoundedCornerShape(50.dp)
+                        ),
+                    painter = if (item.isSelected)
+                        painterResource(id = R.drawable.ic_selected)
+                    else
+                        painterResource(id = R.drawable.ic_add),
+                    contentScale = ContentScale.Fit,
                     contentDescription = null
                 )
             }

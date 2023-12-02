@@ -7,7 +7,6 @@ import androidx.compose.ui.graphics.Color
  */
 
 val Pampas = Color(0xFFFAF9F8)
-val MoonMist = Color(0xFFDFDACC)
 
 val MiddleGray = Color(0xFF747474)
 val DarkGray = Color(0xFF616161)
