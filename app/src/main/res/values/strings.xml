@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EventPlanner</string>
+    <string name="app_name">Event Planner</string>
 
     <string name="err_try_again">Oops, something went wrong! Please try again!</string>
 
