@@ -8,7 +8,10 @@ import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import task.swenson.eventplanner.data.pojos.Item
+import task.swenson.eventplanner.domain.use_case.DeleteItem
 import task.swenson.eventplanner.domain.use_case.FetchItems
+import task.swenson.eventplanner.domain.use_case.SumItemsCost
+import task.swenson.eventplanner.domain.use_case.ToggleItemSelection
 import task.swenson.eventplanner.domain.use_case.UpsertItem
 import task.swenson.eventplanner.domain.util.NullOrEmptyOutputData
 import task.swenson.eventplanner.domain.util.TextHelper
@@ -18,7 +21,10 @@ import javax.inject.Inject
 @HiltViewModel
 class ItemsViewModel @Inject constructor(
     private val fetchItems: FetchItems,
-    private val upsertItem: UpsertItem
+    private val upsertItem: UpsertItem,
+    private val deleteItem: DeleteItem,
+    private val sumItemsCost: SumItemsCost,
+    private val toggleItemSelection: ToggleItemSelection
 ) : ViewModel() {
 
     val state = StateReducerFlow(
@@ -29,7 +35,7 @@ class ItemsViewModel @Inject constructor(
     private val sideEffectsChannel = Channel<ItemsSideEffects>(BUFFERED)
     val sideEffects = sideEffectsChannel.receiveAsFlow()
 
-    private var categoryId = -1
+    private var categoryId: Int = -1
 
     private fun reduceState(
         state: ItemsState,
@@ -43,14 +49,14 @@ class ItemsViewModel @Inject constructor(
 
         is ItemsEvent.ItemsLoaded -> {
             getTotalBudget(categoryId)
-            state.copy(isLoading = false, items = event.items)
+            state.copy(isLoading = true, items = event.items)
         }
 
         is ItemsEvent.TotalBudgetLoaded ->
             state.copy(isLoading = false, totalBudget = event.totalBudget)
 
         is ItemsEvent.ItemClicked -> {
-            updateItem(event.item)
+            toggleItem(event.item, categoryId)
             state.copy(isLoading = true)
         }
 
@@ -62,7 +68,8 @@ class ItemsViewModel @Inject constructor(
             items.remove(oldItem)
             items.add(index, event.item)
 
-            state.copy(isLoading = false, items = items)
+            getTotalBudget(categoryId)
+            state.copy(isLoading = true, items = items)
         }
 
         is ItemsEvent.ErrorLoading ->
@@ -106,7 +113,28 @@ class ItemsViewModel @Inject constructor(
         state.handleEvent(ItemsEvent.ItemsLoaded(response.data))
     }
 
-    private fun updateItem(item: Item) = viewModelScope.launch {
+    private fun toggleItem(item: Item, categoryId: Int) = viewModelScope.launch {
+        val response = toggleItemSelection(item = item, categoryId = categoryId)
+
+        if (response.error != null) {
+            state.handleEvent(ItemsEvent.ErrorLoading(response.error))
+            return@launch
+        }
+
+        if (response.data == null) {
+            state.handleEvent(
+                ItemsEvent.ErrorLoading(TextHelper.Exception(NullOrEmptyOutputData))
+            )
+            return@launch
+        }
+
+        if (item.isSelected)
+            delete(item = response.data)
+        else
+            update(item = response.data)
+    }
+
+    private fun update(item: Item) = viewModelScope.launch {
         val response = upsertItem(item)
 
         if (response.error != null) {
@@ -121,7 +149,24 @@ class ItemsViewModel @Inject constructor(
             return@launch
         }
 
-        getTotalBudget(categoryId)
+        state.handleEvent(ItemsEvent.ItemUpdated(response.data))
+    }
+
+    private fun delete(item: Item) = viewModelScope.launch {
+        val response = deleteItem(item)
+
+        if (response.error != null) {
+            state.handleEvent(ItemsEvent.ErrorLoading(response.error))
+            return@launch
+        }
+
+        if (response.data == null) {
+            state.handleEvent(
+                ItemsEvent.ErrorLoading(TextHelper.Exception(NullOrEmptyOutputData))
+            )
+            return@launch
+        }
+
         state.handleEvent(ItemsEvent.ItemUpdated(response.data))
     }
 
@@ -140,8 +185,13 @@ class ItemsViewModel @Inject constructor(
             return@launch
         }
 
-        val totalBudget = response.data.map { it.avgBudget }.sumOf { it ?: 0 }
+        val totalBudget = sumItemsCost(response.data)
 
-        state.handleEvent(ItemsEvent.TotalBudgetLoaded(totalBudget))
+        if (totalBudget.error != null) {
+            state.handleEvent(ItemsEvent.ErrorLoading(totalBudget.error))
+            return@launch
+        }
+
+        state.handleEvent(ItemsEvent.TotalBudgetLoaded(totalBudget.data ?: 0))
     }
 }

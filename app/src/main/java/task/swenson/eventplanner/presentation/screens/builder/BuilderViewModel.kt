@@ -7,6 +7,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import task.swenson.eventplanner.data.pojos.Category
 import task.swenson.eventplanner.domain.use_case.FetchCategories
 import task.swenson.eventplanner.domain.use_case.FetchItems
 import task.swenson.eventplanner.domain.use_case.SumItemsCost
@@ -41,24 +42,14 @@ class BuilderViewModel @Inject constructor(
 
         is BuilderEvent.CategoriesLoaded -> {
             getTotalBudget()
-            state.copy(isLoading = false, categories = event.categories)
+            state.copy(isLoading = true, categories = event.categories)
         }
 
         is BuilderEvent.TotalBudgetLoaded ->
             state.copy(isLoading = false, totalBudget = event.totalBudget)
 
         is BuilderEvent.CategoryClicked -> {
-            viewModelScope.launch {
-                event.category.id?.let {
-                    sideEffectsChannel.send(
-                        BuilderSideEffects.NavigateToItemsList(
-                            it,
-                            event.category.title ?: ""
-                        )
-                    )
-                }
-            }
-
+            sendEffect(event.category)
             state
         }
 
@@ -139,5 +130,16 @@ class BuilderViewModel @Inject constructor(
         }
 
         state.handleEvent(BuilderEvent.TotalBudgetLoaded(totalBudget.data ?: 0))
+    }
+
+    private fun sendEffect(category: Category) = viewModelScope.launch {
+        category.id?.let {
+            sideEffectsChannel.send(
+                BuilderSideEffects.NavigateToItemsList(
+                    it,
+                    category.title ?: ""
+                )
+            )
+        }
     }
 }
